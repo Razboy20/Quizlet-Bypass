@@ -20,19 +20,27 @@ installLatinAjaxInterceptor();
 chrome.runtime.onMessage.addListener((message: { action: string; tab: chrome.tabs.Tab; value: string; }) => {
 
     if (process.env.NODE_ENV !== 'production') {
-        console.log('Message received from content script:', message);
+        console.info(
+            chrome.i18n.getMessage("messageFromContentScript"),
+            message
+        );
     }
 
     const { action, tab, value } = message;
     if (action === 'copyCookies') {
         if (process.env.NODE_ENV !== 'production') {
-            console.warn('Account cookies received: ', value);
+            console.info(
+                chrome.i18n.getMessage("cookiesReceived"),
+                value
+            );
         }
 
         replaceQuizletCookies(value);
     } else if (action === 'refresh') {
         if (process.env.NODE_ENV !== 'production') {
-            console.warn('Refresh received');
+            console.info(
+                chrome.i18n.getMessage("refreshRequested"),
+            );
         }
 
         chrome.tabs.reload(tab.id!!).catch(() => {
