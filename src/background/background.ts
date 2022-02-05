@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener((message: { action: string; tab: chrome.tab
     } else if (action === 'refresh') {
         if (process.env.NODE_ENV !== 'production') {
             console.info(
-                chrome.i18n.getMessage("refreshRequested"),
+                chrome.i18n.getMessage("debugRefreshRequested"),
             );
         }
 
