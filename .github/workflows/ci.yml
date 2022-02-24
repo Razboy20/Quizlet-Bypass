@@ -22,18 +22,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
-        firefox: ["latest-beta", "latest", "48.0"]
-        chrome: ["stable", "beta"]
-        browser: ["chromium", "firefox"]
+        firefox: ["latest", "48.0"]
+        browser: ["chromium", "firefox-desktop"]
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setting up Node.js 16
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.x
           cache: "npm"
 
       - name: Node set-up
@@ -42,16 +40,16 @@ jobs:
           npm install --save-dev web-ext
 
       - name: Firefox ${{ matrix.firefox }} setup
-        if: matrix.browser == 'firefox'
+        if: matrix.browser == 'firefox-desktop'
         uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: ${{ matrix.firefox }}
 
-      - name: Chrome ${{ matrix.chrome }} setup
+      - name: Chrome stable setup
         if: matrix.browser == 'chromium'
         uses: browser-actions/setup-chrome@latest
         with:
-          chrome-version: ${{ matrix.chrome }}
+          chrome-version: stable
 
       - name: ESLint check
         run: npx eslint .
@@ -68,7 +66,7 @@ jobs:
         working-directory: ./dist/build
 
       - uses: actions/upload-artifact@v2
-        if: ${{ matrix.node-version }} == "16.x" && ${{ matrix.browser }} == "firefox" && ${{ matrix.firefox }} == "latest"
+        if: ${{ matrix.node-version }} == "16.x" && ${{ matrix.browser }} == "firefox-desktop" && ${{ matrix.firefox }} == "latest"
         with:
           name: extension
           path: ./dist/build
