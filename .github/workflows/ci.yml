@@ -57,6 +57,10 @@ jobs:
       - name: Extension build
         run: npm run build --if-present
 
+      - name: Web-Ext lint
+        run: npx web-ext lint --self-hosted
+        working-directory: ./dist/build
+
       - name: Web-Ext check on ${{ matrix.browser }}
         run: npx web-ext run
         env:
