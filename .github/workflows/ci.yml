@@ -42,13 +42,13 @@ jobs:
           npm install --save-dev web-ext
 
       - name: Firefox ${{ matrix.firefox }} setup
-        if: ${{ matrix.browser }} == 'firefox'
+        if: matrix.browser == 'firefox'
         uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: ${{ matrix.firefox }}
 
       - name: Chrome ${{ matrix.chrome }} setup
-        if: ${{ matrix.browser }} == 'chromium'
+        if: matrix.browser == 'chromium'
         uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: ${{ matrix.chrome }}
@@ -59,10 +59,10 @@ jobs:
       - name: Extension build
         run: npm run build --if-present
 
-      - name: Web-Ext check
+      - name: Web-Ext check on ${{ matrix.browser }}
         run: npx web-ext run
         env:
-          WEB_EXT_TARGET: ${{ if matrix.browser == 'firefox' then 'firefox-desktop' else matrix.browser end }}
+          WEB_EXT_TARGET: ${{ matrix.browser }}
           WEB_EXT_START_URL: https://quizlet.com/explanations/textbook-solutions/fundamentals-of-physics-10th-edition-9781118230718/chapter-8-problems-3-09b7bd0f-4259-426e-b8d8-cd736420db42
           WEB_EXT_PRE_INSTALL: true
         working-directory: ./dist/build
